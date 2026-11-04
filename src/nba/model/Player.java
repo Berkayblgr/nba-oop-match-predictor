@@ -1,5 +1,9 @@
 package nba.model;
 
+/**
+ * Represents an active NBA basketball player with per-game box-score statistics
+ * and advanced impact score calculations.
+ */
 public class Player extends Person {
 
     private String position;
@@ -19,6 +23,20 @@ public class Player extends Person {
     private static final double TOP_WEIGHT = 1.8;
     private static final double LEAGUE_AVG_FG_PCT = 46.0;
 
+    /**
+     * Constructs a new Player with comprehensive statistics and validations.
+     * @param name      the player's full name
+     * @param age       the player's age
+     * @param position  the player's primary position (e.g., G, F, C)
+     * @param ppg       points per game
+     * @param rpg       rebounds per game
+     * @param apg       assists per game
+     * @param spg       steals per game
+     * @param bpg       blocks per game
+     * @param topg      turnovers per game
+     * @param fgPct     field goal shooting percentage (0.0 to 100.0)
+     * @throws IllegalArgumentException if any statistical value is invalid
+     */
     public Player(String name, int age, String position, double ppg,
                   double rpg, double apg, double spg, double bpg, double topg, double fgPct) {
 
@@ -101,6 +119,11 @@ public class Player extends Person {
         this.fgPct = fgPct;
     }
 
+    /**
+     * Calculates the player's holistic impact rating using weighted box-score metrics
+     * adjusted by shooting efficiency multiplier relative to NBA league average (46.0%).
+     * @return calculated player impact score
+     */
     public double calculateImpactScore() {
         double baseImpact = PPG_WEIGHT * ppg + RPG_WEIGHT * rpg + APG_WEIGHT * apg
                 + SPG_WEIGHT * spg + BPG_WEIGHT * bpg - TOP_WEIGHT * topg;

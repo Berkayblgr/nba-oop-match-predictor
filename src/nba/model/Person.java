@@ -1,10 +1,20 @@
 package nba.model;
 
+/**
+ * Abstract base class representing an individual person in the NBA ecosystem (e.g., PLayer or Coach).
+ * Encapsulates shared attributes such as name and age with validation logic.
+ */
 public abstract class Person {
 
     private String name;
     private int age;
 
+    /**
+     * Constructs a new Person instance with name and age validations.
+     * @param name the person's name
+     * @param age the person's age (must be between 0 and 100)
+     * @throws IllegalArgumentException if name is null/empty or age is out of bounds
+     */
     public Person(String name, int age) {
         setName(name);
         setAge(age);
@@ -35,6 +45,10 @@ public abstract class Person {
         return name + " (" + age + " years old)";
     }
 
+    /**
+     * Returns a polymorphic summary of the person's role and performance metrics.
+     * @return role summary string
+     */
     public abstract String getRoleSummary();
 
     @Override

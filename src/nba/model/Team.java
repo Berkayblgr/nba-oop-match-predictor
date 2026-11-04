@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Comparator;
 
+/**
+ * Represents an NBA franchise team consisting of a head coach and an active roster.
+ * Implements {@link Iterable} to enable idiomatic iteration over players via a custom {@link PlayerIterator}.
+ */
 public class Team implements Iterable<Player> {
 
     private String name;
@@ -15,6 +19,13 @@ public class Team implements Iterable<Player> {
     private int wins;
     private int losses;
 
+    /**
+     * Constructs a new NBA Team.
+     * @param name          full team name (e.g., "Los Angeles Lakers")
+     * @param abbreviation  three-letter team code (e.g., "LAL")
+     * @param coach         the head coach
+     * @throws IllegalArgumentException if name, abbreviation, or coach is invalid
+     */
     public Team(String name, String abbreviation, Coach coach) {
         setName(name);
         setAbbreviation(abbreviation);
@@ -31,6 +42,11 @@ public class Team implements Iterable<Player> {
     public Coach getCoach() {
         return coach;
     }
+
+    /**
+     * Returns an unmodifiable defensive copy of the active player roster.
+     * @return unmodifiable list of players
+     */
     public List<Player> getPlayers() {
         return List.copyOf(roster);
     }
@@ -62,6 +78,12 @@ public class Team implements Iterable<Player> {
         }
         this.coach = coach;
     }
+
+    /**
+     * Updates the team's regular season win-loss record.
+     * @param wins      number of wins
+     * @param losses    number of losses
+     */
     public void setRecord(int wins, int losses) {
         if (wins >= 0 && losses >= 0) {
             this.wins = wins;
@@ -69,7 +91,11 @@ public class Team implements Iterable<Player> {
         }
     }
 
-
+    /**
+     * Adds an active player to the team's roster with duplicate prevention.
+     * @param player the player to add
+     * @throws IllegalArgumentException if player is null or already present in roster
+     */
     public void addPlayer(Player player) {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
@@ -79,11 +105,22 @@ public class Team implements Iterable<Player> {
         roster.add(player);
     }
 
+    /**
+     * Returns a custom {@link PlayerIterator} over the roster.
+     * @return iterator of players
+     */
     @Override
     public Iterator<Player> iterator() {
         return new PlayerIterator(roster);
     }
 
+    /**
+     * alculates the overall composite power rating of the team based on:
+     * 1. Weighted Top-8 active rotation (starters 1.2x, primary bench 0.6x)
+     * 2. Head coach tactical bonus
+     * 3. Live season win percentage form bonus/penalty
+     * @return overall composite team power score
+     */
     public double calculateTeamPower() {
         if (roster.isEmpty()) {
             return 0.0;
@@ -145,22 +182,3 @@ public class Team implements Iterable<Player> {
         return java.util.Objects.hash(name, abbreviation);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

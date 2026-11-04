@@ -1,5 +1,8 @@
 package nba.model;
 
+/**
+ * Represents a team's Head Coach, contributing a tactical style and power bonus to the team's rating.
+ */
 public class Coach extends Person {
 
     private static final double MIN_TACTICAL_BONUS = 0.0;
@@ -8,6 +11,14 @@ public class Coach extends Person {
     private String tacticalStyle;
     private double tacticalBonus;
 
+    /**
+     * Constructs a new Coach instance.
+     * @param name          the coach's full name
+     * @param age           the coach's age
+     * @param tacticalStyle the tactical philosophy (e.g., Pace & Space, Defensive)
+     * @param tacticalBonus the strategic rating bonus added to team power (bounded 0.0 to 15.0)
+     * @throws IllegalArgumentException if tacticalStyle is blank or tacticalBonus is out of range
+     */
     public Coach(String name, int age, String tacticalStyle,
                  double tacticalBonus) {
 
@@ -46,8 +57,3 @@ public class Coach extends Person {
         return String.format("%s | Style: %s | Bonus: +%.1f", super.toString(), tacticalStyle, tacticalBonus);
     }
 }
-
-
-
-
-
