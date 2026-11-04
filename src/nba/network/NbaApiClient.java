@@ -162,17 +162,17 @@ public class NbaApiClient {
         Coach coach = new Coach("Head Coach (" + code + ")", 45, meta.coachStyle(), meta.coachBonus());
         Team team = new Team(meta.fullName(), code, coach);
         if (code.equals("LAL")) {
-            team.addPlayer(new Player("Luka Doncic", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1));
-            team.addPlayer(new Player("Austin Reaves", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4));
-            team.addPlayer(new Player("Walker Kessler", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2));
+            team.addPlayer(new Player("Luka Doncic", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1, 49.7));
+            team.addPlayer(new Player("Austin Reaves", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4, 47.5));
+            team.addPlayer(new Player("Walker Kessler", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2, 65.0));
         } else if (code.equals("BOS")) {
-            team.addPlayer(new Player("Jayson Tatum", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7));
-            team.addPlayer(new Player("Paul George", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3));
-            team.addPlayer(new Player("Derrick White", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6));
+            team.addPlayer(new Player("Jayson Tatum", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7, 47.5));
+            team.addPlayer(new Player("Paul George", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3, 45.5));
+            team.addPlayer(new Player("Derrick White", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6, 46.5));
         } else {
-            team.addPlayer(new Player(code + " Star Guard", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8));
-            team.addPlayer(new Player(code + " Starting Wing", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9));
-            team.addPlayer(new Player(code + " Rim Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7));
+            team.addPlayer(new Player(code + " Star Guard", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8, 45.0));
+            team.addPlayer(new Player(code + " Starting Wing", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9, 46.5));
+            team.addPlayer(new Player(code + " Rim Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
         }
         return team;
     }

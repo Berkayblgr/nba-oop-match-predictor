@@ -144,6 +144,7 @@ public class SimpleJsonParser {
     }
 
     public static Player parsePlayerStats(String name, int age, String position, String overviewJson) {
+        double fgPct = 46.0;
         int regIndex = overviewJson.indexOf("\"Regular Season\"");
         if (regIndex == -1) {
             return null; // Bu sezon henüz maça çıkmamış (sakat/çaylak) oyuncuyu atla
@@ -164,6 +165,7 @@ public class SimpleJsonParser {
                 case "STL" -> spg = parseSafeDouble(stats[i]);
                 case "BLK" -> bpg = parseSafeDouble(stats[i]);
                 case "TO" -> topg = parseSafeDouble(stats[i]);
+                case "FG%" -> fgPct = parseSafeDouble(stats[i]);
                 default -> {
                 }
             }
@@ -171,7 +173,7 @@ public class SimpleJsonParser {
         if (gamesPlayed <= 0) {
             return null;
         }
-        return new Player(name, age, position, ppg, rpg, apg, spg, bpg, topg);
+        return new Player(name, age, position, ppg, rpg, apg, spg, bpg, topg, fgPct);
 
     }
 }
