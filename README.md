@@ -101,6 +101,8 @@ classDiagram
 
 ## Sample Console Output
 
+> Captured on **Nov 5, 2026**. Ratings and probabilities change daily as live ESPN data (stats, injuries, win-loss records) updates.
+
 ```text
 === NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===
 [1] List Supported NBA Teams
@@ -109,15 +111,15 @@ classDiagram
 [4] Simulate Match Prediction
 [0] Exit
 Your choice: 4
-Enter home team code to predict (e.g. LAL, BOS, HOU): SAC
-Loading live 2026-27 roster for SAC...
-Enter away team code to predict (e.g. LAL, BOS, HOU): LAL
+Enter home team code to predict (e.g. LAL, BOS, HOU): LAL
 Loading live 2026-27 roster for LAL...
+Enter away team code to predict (e.g. LAL, BOS, HOU): POR
+Loading live 2026-27 roster for POR...
 Select Mode ([1] Regular Season, [2] Playoff): 1
 
 === REGULAR SEASON PREDICTOR ===
-Predicted Winner : Los Angeles Lakers [LAL] (Win Probability: 65.4%)
-Power Breakdown  : SAC (Home, +2.2 Court Bonus): 36.12 rating vs LAL (Away): 45.38 rating
+Predicted Winner : Los Angeles Lakers [LAL] (Win Probability: 62,5%)
+Power Breakdown  : LAL (Home, +2,2 Court Bonus): 42,25 rating vs POR (Away): 35,23 rating
 ```
 
 ---
