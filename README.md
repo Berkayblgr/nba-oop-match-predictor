@@ -30,6 +30,7 @@ classDiagram
         -double spg
         -double bpg
         -double topg
+        -double fgPct
         +calculateImpactScore() double
         +getRoleSummary() String
     }
@@ -85,8 +86,10 @@ classDiagram
 
 ## Prediction Model
 
-1. **Player Impact Score:** Weighted per-game box-score contribution penalizing turnovers:
-   `Impact = 1.0*PPG + 1.2*RPG + 1.5*APG + 2.0*SPG + 1.6*BPG - 1.8*TOPG`
+1. **Player Impact Score & Shooting Efficiency (`FG%`):** Weighted box-score metrics scaled by an efficiency multiplier relative to the NBA league average (46.0%):
+   - `BaseImpact = 1.0*PPG + 1.2*RPG + 1.5*APG + 2.0*SPG + 1.6*BPG - 1.8*TOPG`
+   - `Multiplier = 1.0 + ((FG% - 46.0) / 200.0)`
+   - `ImpactScore = BaseImpact * Multiplier`
 2. **Live Injury Filtering:** Players marked `"status":"Out"` in ESPN's live roster feed are excluded automatically before rating calculation.
 3. **Top-8 Rotation & Team Form:** Rather than diluting team strength with end-of-bench garbage-time minutes, `Team.calculateTeamPower()` evaluates the top 8 active rotation players (`1.2x` weight for starters 1–5, `0.6x` weight for bench rotation 6–8), adds the head coach's tactical bonus, and incorporates a live win-percentage form factor `(winPct - 0.50) * 14.0`.
 4. **Context-Specific Modes & Pythagorean Win Expectancy:**
