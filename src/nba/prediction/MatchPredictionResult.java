@@ -2,12 +2,22 @@ package nba.prediction;
 
 import nba.model.Team;
 
+/**
+ * Immutable value object encapsulating the outcome of a simulated NBA match prediction.
+ */
 public class MatchPredictionResult {
 
     private final Team predictedWinner;
     private final double winProbability;
     private final String analysisSummary;
 
+    /**
+     * Constructs a new immutable prediction result with validation checks.
+     * @param predictedWinner   the predicted winning team
+     * @param winProbability    the calculated win probability percentage (between 0.0 and 100.0)
+     * @param analysisSummary   textual breakdown of home vs. away ratings and applied bonuses
+     * @throws IllegalArgumentException if predictedWinner or analysisSummary is invalid, or winProbability is out of range
+     */
     public MatchPredictionResult(Team predictedWinner, double winProbability, String analysisSummary) {
         if (predictedWinner == null) {
             throw new IllegalArgumentException("predictedWinner is null");

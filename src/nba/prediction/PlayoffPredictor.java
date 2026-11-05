@@ -3,6 +3,11 @@ package nba.prediction;
 import nba.model.Team;
 import nba.model.Player;
 
+/**
+ * Playoff prediction engine implementing {@link Predictable}.
+ * Adapts to high-stakes postseason dynamics by amplifying the impact of top superstars,
+ * coaching tactical bonuses, and heightened playoff home-court intensity.
+ */
 public class PlayoffPredictor implements Predictable{
 
     private static final double HOME_COURT_PLAYOFF_BONUS = 3.2;
@@ -14,6 +19,12 @@ public class PlayoffPredictor implements Predictable{
         return "Playoff Predictor";
     }
 
+    /**
+     * Calculates playoff-adjusted team power by identifying the highest-impact superstar
+     * and magnifying both star power and coaching tactical adjustments.
+     * @param team the team to evaluate
+     * @return adjusted playoff power rating
+     */
     private double calculatePlayoffPower(Team team) {
         double maxStarImpact = 0.0;
         for (Player player : team) {
@@ -26,6 +37,14 @@ public class PlayoffPredictor implements Predictable{
                 (team.getCoach().getTacticalBonus() * COACH_PLAYOFF_WEIGHT);
     }
 
+    /**
+     * imulates a high-intensity playoff matchup applying elevated playoff home-court bonus
+     * and star-driven ratings via Pythagorean expectation.
+     * @param homeTeam the team hosting the game on its home court
+     * @param awayTeam the visiting team
+     * @return the playoff prediction outcome
+     * @throws IllegalArgumentException if teams are null, empty or identical
+     */
     @Override
     public MatchPredictionResult predictWinner(Team homeTeam, Team awayTeam) {
         if (homeTeam == null || awayTeam == null) {

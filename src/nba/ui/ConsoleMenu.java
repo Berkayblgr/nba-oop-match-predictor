@@ -9,11 +9,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Interactive text-based console interface driving user interactions,
+ * team inspections, player rankings, and polymorphic match simulations.
+ */
 public class ConsoleMenu {
 
     private final NbaApiClient apiClient;
     private final Scanner scanner;
 
+    /**
+     * Constructs a new ConsoleMenu bound to an API client instance.
+     * @param apiClient the network client used for fetching live NBA data
+     * @throws IllegalArgumentException if apiClient is null
+     */
     public ConsoleMenu(NbaApiClient apiClient) {
         if (apiClient == null) {
             throw new IllegalArgumentException("apiClient cannot be null");
@@ -22,6 +31,9 @@ public class ConsoleMenu {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Starts the main menu event loop, processing user selections until exit.
+     */
     public void start() {
         boolean running = true;
         while (running) {
@@ -49,6 +61,11 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Prompts the user to enter an NBA team code and fetches the populated team object.
+     * @param prompt display message prompting input
+     * @return populated {@link Team} instance or null if the code is invalid
+     */
     private Team promptTeam(String prompt) {
         System.out.print(prompt);
         String code = scanner.nextLine().trim().toUpperCase();
@@ -61,6 +78,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Displays all 30 supported NBA franchises.
+     */
     private void listTeams() {
         System.out.println("\n--- Supported NBA Teams ---");
         for (String info : apiClient.getSupportedTeamsSummary()) {
@@ -68,6 +88,10 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Inspects a selected franchise's head coach and prints every player
+     * via the custom iterator implemented on {@link Team}.
+     */
     private void inspectRoster() {
         Team team = promptTeam("Enter team code (e.g. LAL, BOS, HOU): ");
         if (team == null) {
@@ -81,6 +105,9 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Ranks all active players on a team by their calculated impact score in descending order.
+     */
     private void rankPlayersByImpact() {
         Team team = promptTeam("Enter team code to rank players (e.g. LAL, BOS, HOU): ");
         if (team == null) {
@@ -97,6 +124,10 @@ public class ConsoleMenu {
         }
     }
 
+    /**
+     * Guides the user through a matchup simulation, allowing selection between
+     * regular season and playoff prediction strategies polymorphically.
+     */
     private void predictMatch() {
         Team hometeam = promptTeam("Enter home team code to predict (e.g. LAL, BOS, HOU): ");
         if (hometeam == null) {

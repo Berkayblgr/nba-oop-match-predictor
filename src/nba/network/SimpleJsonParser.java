@@ -5,8 +5,18 @@ import nba.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Lightweight, zero-dependency JSON parsing utility for extracting NBA data
+ * from ESPN's public API endpoints using pure Java string manipulation.
+ */
 public class SimpleJsonParser {
 
+    /**
+     * Extracts a scalar string value for a given key from a JSON fragment.
+     * @param json  the JSON string to search within
+     * @param key   the JSON property name
+     * @return the extracted string value, or an empty string if not found
+     */
     public static String extractValue(String json, String key) {
 
         String searchKey = "\"" + key + "\"";
@@ -39,6 +49,12 @@ public class SimpleJsonParser {
         return json.substring(startIndex, endIndex).replace("\"", "").trim();
     }
 
+    /**
+     * Extracts an array of string values for a specified array key from JSON.
+     * @param json      the JSON string containing the target array
+     * @param arrayKey  the key identifying the JSON array
+     * @return          an array of trimmed string values, or an empty array if not found
+     */
     public static String[] extractArray(String json, String arrayKey) {
 
         String searchKey = "\"" + arrayKey + "\"";
@@ -61,6 +77,11 @@ public class SimpleJsonParser {
         return content.split(",");
     }
 
+    /**
+     * Safely parses a string value into a double, returning 0.0 on error or blank input.
+     * @param value the string representation of number
+     * @return parsed double or 0.0
+     */
     private static double parseSafeDouble(String value) {
         if (value == null || value.isBlank()) {
             return 0.0;
@@ -72,6 +93,13 @@ public class SimpleJsonParser {
         }
     }
 
+    /**
+     * Parses the head coach name from an ESPN roster JSON and constructs a {@link Coach}.
+     * @param rosterJson    the raw team roster JSON string
+     * @param tacticalStyle the assigned tactical philosophy for this franchise
+     * @param tacticalBonus the tactical rating bonus
+     * @return a constructed {@link Coach} instance
+     */
     public static Coach parseCoach(String rosterJson, String tacticalStyle, double tacticalBonus) {
         int coachIndex = rosterJson.indexOf("\"coach\":[");
         String coachName = "Head Coach";
@@ -87,6 +115,12 @@ public class SimpleJsonParser {
         return new Coach(coachName, 45, tacticalStyle, tacticalBonus);
     }
 
+    /**
+     * Parses all athlete entries from a roster JSON, automatically filtering out
+     * any player officially designated as "Out" in live injury reports.
+     * @param rosterJson the raw roster JSON payload
+     * @return list of string arrays each containing [athleteId, fullName, age, position]
+     */
     public static int[] parseTeamRecord(String rosterJson) {
         String record = extractValue(rosterJson, "recordSummary"); // örn: "6-2"
         String[] parts = record.split("-");
@@ -143,6 +177,15 @@ public class SimpleJsonParser {
         return entries;
     }
 
+    /**
+     * Parses an individual player's regular season per-game statistics and shooting efficiency
+     * from ESPN's athlete overview endpoint into a {@link Player} instance.
+     * @param name       player full name
+     * @param age        player age
+     * @param position   player court position
+     * @param overviewJson athlete overview JSON payload
+     * @return a populated {@link Player} instance, or null if the player has no regular season game log
+     */
     public static Player parsePlayerStats(String name, int age, String position, String overviewJson) {
         double fgPct = 46.0;
         int regIndex = overviewJson.indexOf("\"Regular Season\"");

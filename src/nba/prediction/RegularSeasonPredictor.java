@@ -2,6 +2,10 @@ package nba.prediction;
 
 import nba.model.Team;
 
+/**
+ * Regular season prediction engine implementing {@link Predictable}.
+ * Incorporates a standard home-court rating bonus and calculates win probability using a Pythagorean expectation exponent to produce realistic separation.
+ */
 public class RegularSeasonPredictor implements Predictable{
 
     private static final double HOME_COURT_BONUS = 2.2;
@@ -11,6 +15,14 @@ public class RegularSeasonPredictor implements Predictable{
         return "Regular Season Predictor";
     }
 
+    /**
+     * Predicts the match outcome by applying standard regular season home-court advantage
+     * and computing win probabilities via Pythagorean expectation (exponent 2.8).
+     * @param homeTeam the team hosting the game on its home court
+     * @param awayTeam the visiting team
+     * @return the prediction outcome
+     * @throws IllegalArgumentException if teams are null, empty or identical
+     */
     @Override
     public MatchPredictionResult predictWinner(Team homeTeam, Team awayTeam) {
         if (homeTeam == null || awayTeam == null) {

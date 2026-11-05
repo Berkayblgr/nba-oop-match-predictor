@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Asynchronous HTTP client layer managing network communication with ESPN's public NBA endpoints.
+ * Handles concurrent athlete fetching via {@link CompletableFuture}, in-memory team caching,
+ * and graceful fallback to offline rosters if live endpoints are unreachable.
+ */
 public class NbaApiClient {
 
     private static final String ROSTER_URL =
@@ -29,6 +34,9 @@ public class NbaApiClient {
     private final Map<String, TeamMeta> teamCatalog;
     private final Map<String, Team> teamCache;
 
+    /**
+     * Initializes the client with an 8-second connect timeout and populates the 30-team NBA catalog.
+     */
     public NbaApiClient() {
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(8))
@@ -72,6 +80,11 @@ public class NbaApiClient {
         teamCatalog.put("WAS", new TeamMeta("27", "Washington Wizards", "Development", 4.0));
     }
 
+    /**
+     * Checks if a given three-letter team abbreviation is part of the supported NBA catalog.
+     * @param teamCode three-letter team abbreviation
+     * @return true if supported, false otherwise
+     */
     public boolean isSupportedTeam(String teamCode) {
         if (teamCode == null) {
             return false;
@@ -79,6 +92,10 @@ public class NbaApiClient {
         return teamCatalog.containsKey(teamCode.trim().toUpperCase());
     }
 
+    /**
+     * Returns a formatted summary list of all supported NBA teams for display in the console menu.
+     * @return list of team summary strings (e.g., "LAL - Los Angeles Lakers")
+     */
     public List<String> getSupportedTeamsSummary() {
         List<String> list = new ArrayList<>();
         for (Map.Entry<String, TeamMeta> entry : teamCatalog.entrySet()) {
@@ -87,6 +104,13 @@ public class NbaApiClient {
         return list;
     }
 
+    /**
+     * Fetches a fully populated {@link Team} with coach and active players for the specified code.
+     * Serves cached instances if already loaded; falls back to an offline default roster upon network failure.
+     * @param teamCode three-letter team abbreviation
+     * @return fully populated {@link Team}
+     * @throws IllegalArgumentException if the team code ist not recognized
+     */
     public Team fetchTeam(String teamCode) {
         if (!isSupportedTeam(teamCode)) {
             throw new IllegalArgumentException("Unsupported NBA team code: " + teamCode);
@@ -158,6 +182,12 @@ public class NbaApiClient {
         return response.body();
     }
 
+    /**
+     * Builds an offline fallback team with realistic stats when the live API is inaccessible.
+     * @param code team abbreviation
+     * @param meta team metadata record
+     * @return fallback {@link Team}
+     */
     private Team createFallbackTeam(String code, TeamMeta meta) {
         Coach coach = new Coach("Head Coach (" + code + ")", 45, meta.coachStyle(), meta.coachBonus());
         Team team = new Team(meta.fullName(), code, coach);
