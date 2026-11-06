@@ -1,5 +1,6 @@
 package nba.network;
 
+import nba.model.ScheduledMatch;
 import nba.model.Coach;
 import nba.model.Player;
 import java.util.ArrayList;
@@ -218,5 +219,43 @@ public class SimpleJsonParser {
         }
         return new Player(name, age, position, ppg, rpg, apg, spg, bpg, topg, fgPct);
 
+    }
+
+    /**
+     * Parses today's scheduled NBA matchups from ESPN's scoreboard JSON payload.
+     * Extracts home and away team abbreviations by parsing matchup patterns (e.g., "BOS @ LAL").
+     * @param scoreboardJson the raw daily scoreboard JSON response
+     * @return a list of {@link ScheduledMatch} instances representing today's games
+     */
+    public static List<ScheduledMatch> parseScheduledMatches(String scoreboardJson) {
+        List<ScheduledMatch> matches = new ArrayList<>();
+        if (scoreboardJson == null || scoreboardJson.isBlank()) {
+            return matches;
+        }
+
+        String marker = "\"shortName\":\"";
+        int searchFrom = 0;
+
+        while (true) {
+            int markerPos = scoreboardJson.indexOf(marker, searchFrom);
+            if (markerPos == -1) {
+                break;
+            }
+            int valStart = markerPos + marker.length();
+            int valEnd = scoreboardJson.indexOf('"', valStart);
+            if  (valEnd == -1) {
+                break;
+            }
+            String matchUp = scoreboardJson.substring(valStart, valEnd);
+            if (matchUp.contains("@")) {
+                String[] teams = matchUp.split("@");
+                String away = teams[0].trim();
+                String home = teams[1].trim();
+
+                matches.add(new ScheduledMatch(home, away, "Scheduled"));
+            }
+            searchFrom = valEnd + 1;
+        }
+        return matches;
     }
 }
