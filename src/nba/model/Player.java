@@ -76,6 +76,12 @@ public class Player extends Person {
         return fgPct;
     }
 
+    /**
+     * Validates that a numeric player statistic is non-negative and a valid number.
+     * @param value     the numeric statistical value to validate
+     * @param statName  the human-readable label of the metric used in error messages
+     * @throws IllegalArgumentException if {@code value} is negative or {@link Double#isNaN(double)}
+     */
     private void validateStat(double value, String statName) {
         if (value < 0 || Double.isNaN(value)) {
             throw new IllegalArgumentException(statName + " cannot be negative: " + value);
