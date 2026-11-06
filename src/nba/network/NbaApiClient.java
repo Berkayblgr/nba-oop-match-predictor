@@ -1,5 +1,6 @@
 package nba.network;
 
+import nba.model.ScheduledMatch;
 import nba.model.Coach;
 import nba.model.Player;
 import nba.model.Team;
@@ -26,6 +27,8 @@ public class NbaApiClient {
             "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/%s/roster";
     private static final String OVERVIEW_URL =
             "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/%s/overview";
+    private static final String SCOREBOARD_URL =
+            "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard";
 
     private record TeamMeta(String espnId, String fullName, String coachStyle, double coachBonus) {
     }
@@ -165,6 +168,26 @@ public class NbaApiClient {
             return fallback;
         }
     }
+
+    /**
+     * Fetches today's live scheduled NBA matchups from ESPN's scoreboard endpoint.
+     * Falls back to sample marquee matchups if the endpoint is unreachable or offline.
+     * @return a list of {@link ScheduledMatch} instances scheduled for today
+     */
+    public List<ScheduledMatch> fetchTonightMatches() {
+        try {
+            String json = sendGet(SCOREBOARD_URL);
+            List<ScheduledMatch> matches = SimpleJsonParser.parseScheduledMatches(json);
+            if (!matches.isEmpty()) {
+                return matches;
+            }
+            throw new IllegalStateException("No scheduled games found");
+        } catch (Exception e) {
+            System.out.println("[INFO] Live scoreboard unavailable. Loading sample matchups...");
+            return createFallbackMatches();
+        }
+    }
+
     private HttpRequest buildGetRequest(String url) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -205,6 +228,14 @@ public class NbaApiClient {
             team.addPlayer(new Player(code + " Rim Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
         }
         return team;
+    }
+
+    private List<ScheduledMatch> createFallbackMatches() {
+        List<ScheduledMatch> fallback = new ArrayList<>();
+        fallback.add(new ScheduledMatch("LAL", "BOS", "01:30 CET"));
+        fallback.add(new ScheduledMatch("DEN", "GSW", "03:00 CET"));
+        fallback.add(new ScheduledMatch("NYK", "CLE", "01:00 CET"));
+        return fallback;
     }
 }
 

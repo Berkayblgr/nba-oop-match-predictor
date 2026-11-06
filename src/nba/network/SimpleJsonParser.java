@@ -6,6 +6,10 @@ import nba.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Lightweight, zero-dependency JSON parsing utility for extracting NBA data
  * from ESPN's public API endpoints using pure Java string manipulation.
@@ -252,10 +256,28 @@ public class SimpleJsonParser {
                 String away = teams[0].trim();
                 String home = teams[1].trim();
 
-                matches.add(new ScheduledMatch(home, away, "Scheduled"));
+                String dateValue = extractValue(scoreboardJson.substring(markerPos), "date");
+                String matchTime = convertUtcToBerlinTime(dateValue);
+                matches.add(new ScheduledMatch(home, away, matchTime));
             }
             searchFrom = valEnd + 1;
         }
         return matches;
+    }
+
+    /**
+     * Converts an ISO-8601 UTC timestamp string from ESPN into formatted Berlin local time (CET/CEST).
+     * @param utcDateStr ISO-8601 formatted date string (e.g., "2026-11-06T00:30Z")
+     * @return formatted local time string (e.g., "01:30 CET") or a fallback label if parsing fails
+     */
+    public static String convertUtcToBerlinTime(String utcDateStr) {
+        try {
+            Instant instant = Instant.parse(utcDateStr.trim());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm z")
+                    .withZone(ZoneId.of("Europe/Berlin"));
+            return formatter.format(instant);
+        } catch (Exception e) {
+            return "Scheduled (CET)";
+        }
     }
 }
