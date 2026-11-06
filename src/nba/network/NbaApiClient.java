@@ -84,11 +84,34 @@ public class NbaApiClient {
     }
 
     /**
+     * Normalizes non-standard ESPN team abbreviations (e.g., "GS", "WSH", "UTAH")
+     * into standard three-letter NBA franchise codes recognized by the catalog.
+     * @param code raw team abbreviation from scoreboard feed
+     * @return normalized standard team code
+     */
+    public String normalizeTeamCode(String code) {
+        if (code == null) return "";
+        String c = code.trim().toUpperCase();
+        return switch (c) {
+            case "GS", "GSW" -> "GSW";
+            case "NO", "NOP" -> "NOP";
+            case "UT", "UTAH", "UTA" -> "UTA";
+            case "SA", "SAS" -> "SAS";
+            case "NY", "NYK" -> "NYK";
+            case "WSH", "WAS" -> "WAS";
+            case "PHX", "PHO" -> "PHX";
+            case "BKN", "BRK" -> "BKN";
+            default -> c;
+        };
+    }
+
+    /**
      * Checks if a given three-letter team abbreviation is part of the supported NBA catalog.
      * @param teamCode three-letter team abbreviation
      * @return true if supported, false otherwise
      */
     public boolean isSupportedTeam(String teamCode) {
+        teamCode = normalizeTeamCode(teamCode);
         if (teamCode == null) {
             return false;
         }
@@ -115,6 +138,7 @@ public class NbaApiClient {
      * @throws IllegalArgumentException if the team code ist not recognized
      */
     public Team fetchTeam(String teamCode) {
+        teamCode = normalizeTeamCode(teamCode);
         if (!isSupportedTeam(teamCode)) {
             throw new IllegalArgumentException("Unsupported NBA team code: " + teamCode);
         }
@@ -176,7 +200,8 @@ public class NbaApiClient {
      */
     public List<ScheduledMatch> fetchTonightMatches() {
         try {
-            String json = sendGet(SCOREBOARD_URL);
+            String todayDate = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE);
+            String json = sendGet(SCOREBOARD_URL + "?dates=" + todayDate);
             List<ScheduledMatch> matches = SimpleJsonParser.parseScheduledMatches(json);
             if (!matches.isEmpty()) {
                 return matches;
@@ -238,33 +263,3 @@ public class NbaApiClient {
         return fallback;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

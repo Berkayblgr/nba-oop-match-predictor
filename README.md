@@ -12,6 +12,7 @@ Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JS
 - **Encapsulation & Defensive Copying:** Strict input validation on all constructors/setters, immutable `MatchPredictionResult` value objects, and unmodifiable roster views via `List.copyOf(...)`.
 - **Custom Iterator Pattern (`nba.iterator`):** `Team` implements `Iterable<Player>` backed by a custom `PlayerIterator` (`Iterator<Player>`), enabling idiomatic `for (Player player : team)` traversal without exposing internal list references.
 - **Strategy Pattern & Polymorphism (`nba.prediction`):** `Predictable` defines a common contract implemented by `RegularSeasonPredictor` and `PlayoffPredictor`, selected dynamically at runtime in `ConsoleMenu`.
+- **Modern Java Record & Timezone Conversion (`nba.model`, `nba.network`):** Immutable `ScheduledMatch` record represents daily games fetched from ESPN's live scoreboard, converting UTC tip-off times automatically to Berlin local time (CET/CEST) via `java.time`.
 - **Asynchronous Networking & Resilience (`nba.network`):** `NbaApiClient` dispatches non-blocking per-athlete HTTP requests concurrently via `CompletableFuture`, caches loaded `Team` instances in memory, and falls back gracefully to offline rosters if network connectivity is unavailable.
 
 ```mermaid
@@ -70,6 +71,12 @@ classDiagram
         -Team predictedWinner
         -double winProbability
         -String analysisSummary
+    }
+    class ScheduledMatch {
+        <<record>>
+        -String homeTeamCode
+        -String awayTeamCode
+        -String matchStatus
     }
 
     Person <|-- Player
@@ -136,7 +143,8 @@ src/
     │   ├── Person.java
     │   ├── Player.java
     │   ├── Coach.java
-    │   └── Team.java
+    │   ├── Team.java
+    │   └── ScheduledMatch.java
     ├── network/
     │   ├── NbaApiClient.java
     │   └── SimpleJsonParser.java

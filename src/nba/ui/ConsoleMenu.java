@@ -1,5 +1,6 @@
 package nba.ui;
 
+import nba.model.ScheduledMatch;
 import nba.model.Player;
 import nba.model.Team;
 import nba.network.NbaApiClient;
@@ -42,6 +43,7 @@ public class ConsoleMenu {
             System.out.println("[2] Inspect Team Roster & Coach");
             System.out.println("[3] Player Impact Score Ranking");
             System.out.println("[4] Simulate Match Prediction");
+            System.out.println("[5] Predict Tonight's NBA Games");
             System.out.println("[0] Exit");
             System.out.print("Your choice: ");
 
@@ -52,11 +54,12 @@ public class ConsoleMenu {
                 case "2" -> inspectRoster();
                 case "3" -> rankPlayersByImpact();
                 case "4" -> predictMatch();
+                case "5" -> predictTonightGames();
                 case "0" -> {
                     System.out.println("Thank you for using NBA 2026-27. Goodbye!");
                     running = false;
                 }
-                default -> System.out.println("Invalid choice! Please enter 0, 1, 2, 3 or 4.");
+                default -> System.out.println("Invalid choice! Please enter 0, 1, 2, 3, 4 or 5.");
             }
         }
     }
@@ -158,4 +161,24 @@ public class ConsoleMenu {
         System.out.println(result);
     }
 
+    /**
+     * Fetches today's scheduled NBA matchups and performs batch match predictions
+     * displaying tip-off times converted to Berlin local time (CET/CEST).
+     */
+    private void predictTonightGames() {
+        System.out.println("\n=== TONIGHT'S NBA MATCHUPS & PREDICTIONS (BERLIN TIME) ===");
+        List<ScheduledMatch> matches = apiClient.fetchTonightMatches();
+        int matchNumber = 1;
+        Predictable predictor;
+        predictor = new RegularSeasonPredictor();
+        for (ScheduledMatch match : matches) {
+            Team home = apiClient.fetchTeam(match.homeTeamCode());
+            Team away = apiClient.fetchTeam(match.awayTeamCode());
+            MatchPredictionResult result = predictor.predictWinner(home, away);
+
+            System.out.printf("%nMatch #%d: %s @ %s | Tip-off: %s%n",
+                    matchNumber++, match.awayTeamCode(), match.homeTeamCode(), match.matchStatus());
+            System.out.println(result);
+        }
+    }
 }

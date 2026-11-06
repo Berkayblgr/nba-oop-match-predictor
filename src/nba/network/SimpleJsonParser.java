@@ -232,6 +232,7 @@ public class SimpleJsonParser {
      * @return a list of {@link ScheduledMatch} instances representing today's games
      */
     public static List<ScheduledMatch> parseScheduledMatches(String scoreboardJson) {
+
         List<ScheduledMatch> matches = new ArrayList<>();
         if (scoreboardJson == null || scoreboardJson.isBlank()) {
             return matches;
@@ -256,8 +257,21 @@ public class SimpleJsonParser {
                 String away = teams[0].trim();
                 String home = teams[1].trim();
 
-                String dateValue = extractValue(scoreboardJson.substring(markerPos), "date");
-                String matchTime = convertUtcToBerlinTime(dateValue);
+                int checkEnd = Math.min(scoreboardJson.length(), markerPos + 500);
+                if (scoreboardJson.substring(markerPos, checkEnd).contains("\"state\":\"post\"")) {
+                    searchFrom = valEnd + 1;
+                    continue;
+                }
+
+                int dateMarker = scoreboardJson.lastIndexOf("\"date\":\"", markerPos);
+                String matchTime = "Scheduled (CET)";
+                if (dateMarker != -1) {
+                    int dStart = dateMarker + 8; // "\"date\":\"" uzunluğu
+                    int dEnd = scoreboardJson.indexOf('"', dStart);
+                    if (dEnd != -1) {
+                        matchTime = convertUtcToBerlinTime(scoreboardJson.substring(dStart, dEnd));
+                    }
+                }
                 matches.add(new ScheduledMatch(home, away, matchTime));
             }
             searchFrom = valEnd + 1;
@@ -272,8 +286,13 @@ public class SimpleJsonParser {
      */
     public static String convertUtcToBerlinTime(String utcDateStr) {
         try {
-            Instant instant = Instant.parse(utcDateStr.trim());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm z")
+            String normalized = utcDateStr.trim();
+            // ESPN tarihi saniyesiz gönderirse (örn: "2026-11-07T00:00Z"), araya ":00" ekle
+            if (normalized.endsWith("Z") && normalized.length() == 17) {
+                normalized = normalized.substring(0, 16) + ":00Z";
+            }
+            Instant instant = Instant.parse(normalized);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm z", java.util.Locale.US)
                     .withZone(ZoneId.of("Europe/Berlin"));
             return formatter.format(instant);
         } catch (Exception e) {
