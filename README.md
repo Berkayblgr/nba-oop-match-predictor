@@ -108,7 +108,9 @@ classDiagram
 
 ## Sample Console Output
 
-> Captured on **Nov 5, 2026**. Ratings and probabilities change daily as live ESPN data (stats, injuries, win-loss records) updates.
+> Real console runs captured from live ESPN 2026-27 feeds. Ratings, injuries, and win probabilities update dynamically as real games conclude.
+
+### 1. Single Match Prediction (Option `[4]`)
 
 ```text
 === NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===
@@ -116,6 +118,7 @@ classDiagram
 [2] Inspect Team Roster & Coach
 [3] Player Impact Score Ranking
 [4] Simulate Match Prediction
+[5] Predict Tonight's NBA Games
 [0] Exit
 Your choice: 4
 Enter home team code to predict (e.g. LAL, BOS, HOU): LAL
@@ -127,6 +130,53 @@ Select Mode ([1] Regular Season, [2] Playoff): 1
 === REGULAR SEASON PREDICTOR ===
 Predicted Winner : Los Angeles Lakers [LAL] (Win Probability: 62,5%)
 Power Breakdown  : LAL (Home, +2,2 Court Bonus): 42,25 rating vs POR (Away): 35,23 rating
+```
+
+### 2. Live Daily Matchups & Batch Prediction in Berlin Time (Option `[5]`)
+
+```text
+=== NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===
+[1] List Supported NBA Teams
+[2] Inspect Team Roster & Coach
+[3] Player Impact Score Ranking
+[4] Simulate Match Prediction
+[5] Predict Tonight's NBA Games
+[0] Exit
+Your choice: 5
+
+=== TONIGHT'S NBA MATCHUPS & PREDICTIONS (BERLIN TIME) ===
+
+Match #1: LAL @ ATL | Tip-off: 01:00 CET
+Predicted Winner : Los Angeles Lakers [LAL] (Win Probability: 56,9%)
+Power Breakdown  : ATL (Home, +2,2 Court Bonus): 36,94 rating vs LAL (Away): 40,78 rating
+
+Match #2: CLE @ CHA | Tip-off: 01:00 CET
+Predicted Winner : Cleveland Cavaliers [CLE] (Win Probability: 81,6%)
+Power Breakdown  : CHA (Home, +2,2 Court Bonus): 20,64 rating vs CLE (Away): 35,12 rating
+
+Match #3: WSH @ DET | Tip-off: 01:00 CET
+Predicted Winner : Detroit Pistons [DET] (Win Probability: 63,0%)
+Power Breakdown  : DET (Home, +2,2 Court Bonus): 35,03 rating vs WAS (Away): 28,95 rating
+
+Match #4: MEM @ TOR | Tip-off: 01:30 CET
+Predicted Winner : Toronto Raptors [TOR] (Win Probability: 51,6%)
+Power Breakdown  : TOR (Home, +2,2 Court Bonus): 34,50 rating vs MEM (Away): 33,70 rating
+
+Match #5: IND @ DAL | Tip-off: 02:00 CET
+Predicted Winner : Dallas Mavericks [DAL] (Win Probability: 70,9%)
+Power Breakdown  : DAL (Home, +2,2 Court Bonus): 37,35 rating vs IND (Away): 27,15 rating
+
+Match #6: DEN @ HOU | Tip-off: 02:30 CET
+Predicted Winner : Houston Rockets [HOU] (Win Probability: 54,9%)
+Power Breakdown  : HOU (Home, +2,2 Court Bonus): 41,56 rating vs DEN (Away): 38,72 rating
+
+Match #7: SA @ PHX | Tip-off: 03:00 CET
+Predicted Winner : San Antonio Spurs [SAS] (Win Probability: 64,9%)
+Power Breakdown  : PHX (Home, +2,2 Court Bonus): 31,34 rating vs SAS (Away): 39,03 rating
+
+Match #8: NO @ GS | Tip-off: 04:00 CET
+Predicted Winner : Golden State Warriors [GSW] (Win Probability: 66,8%)
+Power Breakdown  : GSW (Home, +2,2 Court Bonus): 39,31 rating vs NOP (Away): 30,63 rating
 ```
 
 ---
