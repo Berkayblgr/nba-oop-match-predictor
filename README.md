@@ -87,6 +87,7 @@ classDiagram
     Predictable <|.. RegularSeasonPredictor
     Predictable <|.. PlayoffPredictor
     Predictable ..> MatchPredictionResult : returns
+    Team ..> ScheduledMatch : referenced in
 ```
 
 ---
@@ -184,27 +185,30 @@ Power Breakdown  : GSW (Home, +2,2 Court Bonus): 39,31 rating vs NOP (Away): 30,
 ## Project Structure
 
 ```text
-src/
-├── Main.java
-└── nba/
-    ├── iterator/
-    │   └── PlayerIterator.java
-    ├── model/
-    │   ├── Person.java
-    │   ├── Player.java
-    │   ├── Coach.java
-    │   ├── Team.java
-    │   └── ScheduledMatch.java
-    ├── network/
-    │   ├── NbaApiClient.java
-    │   └── SimpleJsonParser.java
-    ├── prediction/
-    │   ├── Predictable.java
-    │   ├── MatchPredictionResult.java
-    │   ├── RegularSeasonPredictor.java
-    │   └── PlayoffPredictor.java
-    └── ui/
-        └── ConsoleMenu.java
+nba-oop-match-predictor/
+├── .gitignore
+├── README.md
+└── src/
+    ├── Main.java
+    └── nba/
+        ├── iterator/
+        │   └── PlayerIterator.java
+        ├── model/
+        │   ├── Person.java
+        │   ├── Player.java
+        │   ├── Coach.java
+        │   ├── Team.java
+        │   └── ScheduledMatch.java
+        ├── network/
+        │   ├── NbaApiClient.java
+        │   └── SimpleJsonParser.java
+        ├── prediction/
+        │   ├── Predictable.java
+        │   ├── MatchPredictionResult.java
+        │   ├── RegularSeasonPredictor.java
+        │   └── PlayoffPredictor.java
+        └── ui/
+            └── ConsoleMenu.java
 ```
 
 ---
