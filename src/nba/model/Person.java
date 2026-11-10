@@ -12,7 +12,7 @@ public abstract class Person {
     /**
      * Constructs a new Person instance with name and age validations.
      * @param name the person's name
-     * @param age the person's age (must be between 0 and 100)
+     * @param age the person's age (must be between 18 and 100)
      * @throws IllegalArgumentException if name is null/empty or age is out of bounds
      */
     public Person(String name, int age) {
@@ -34,8 +34,8 @@ public abstract class Person {
         this.name = name;
     }
     public final void setAge(int age) {
-        if (age < 0 || age > 100) {
-            throw new IllegalArgumentException("Age must be between 0 and 100");
+        if (age < 18 || age > 100) {
+            throw new IllegalArgumentException("Age must be between 18 and 100");
         }
         this.age = age;
     }
