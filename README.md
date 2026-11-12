@@ -213,7 +213,9 @@ nba-oop-match-predictor/
     └── nba/
         └── model/
             ├── PersonTest.java
-            └── PlayerTest.java
+            ├── PlayerTest.java
+            ├── CoachTest.java
+            └── TeamTest.java
 ```
 
 ---
