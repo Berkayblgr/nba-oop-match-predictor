@@ -1,8 +1,8 @@
-# NBA OOP Analyzer & Match Predictor
+# NBA Roster & Matchup Analyzer
 
 A zero-dependency Java console application that fetches live NBA rosters, head coach names, injury statuses, and per-game player statistics from ESPN's public endpoints to analyze player impact and simulate matchup win probabilities using a heuristic rating model.
 
-Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JSON parsing, and core Object-Oriented Programming patterns) without external runtime libraries or build frameworks.
+Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JSON parsing) and core Object-Oriented Programming (OOP) principles without external runtime libraries or build frameworks.
 
 ---
 
@@ -115,7 +115,7 @@ classDiagram
 ### 1. Single Match Prediction (Option `[4]`)
 
 ```text
-=== NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===
+=== NBA ROSTER & MATCHUP ANALYZER ===
 [1] List Supported NBA Teams
 [2] Inspect Team Roster & Coach
 [3] Player Impact Score Ranking
@@ -137,7 +137,7 @@ Power Breakdown  : LAL (Home, +2,2 Court Bonus): 42,25 rating vs POR (Away): 35,
 ### 2. Live Daily Matchups & Batch Prediction in Berlin Time (Option `[5]`)
 
 ```text
-=== NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===
+=== NBA ROSTER & MATCHUP ANALYZER ===
 [1] List Supported NBA Teams
 [2] Inspect Team Roster & Coach
 [3] Player Impact Score Ranking

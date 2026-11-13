@@ -38,7 +38,7 @@ public class ConsoleMenu {
     public void start() {
         boolean running = true;
         while (running) {
-            System.out.println("\n=== NBA 2026-27 OOP ANALYZER & MATCH PREDICTOR ===");
+            System.out.println("\n=== NBA ROSTER & MATCHUP ANALYZER ===");
             System.out.println("[1] List Supported NBA Teams");
             System.out.println("[2] Inspect Team Roster & Coach");
             System.out.println("[3] Player Impact Score Ranking");
@@ -56,7 +56,7 @@ public class ConsoleMenu {
                 case "4" -> predictMatch();
                 case "5" -> predictTonightGames();
                 case "0" -> {
-                    System.out.println("Thank you for using NBA 2026-27. Goodbye!");
+                    System.out.println("Thank you for using NBA Roster & Matchup Analyzer. Goodbye!");
                     running = false;
                 }
                 default -> System.out.println("Invalid choice! Please enter 0, 1, 2, 3, 4 or 5.");

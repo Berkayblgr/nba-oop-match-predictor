@@ -218,7 +218,7 @@ public class NbaApiClient {
                 .uri(URI.create(url))
                 .timeout(Duration.ofSeconds(8))
                 .header("Accept", "application/json")
-                .header("User-Agent", "NbaOopAnalyzer/1.0")
+                .header("User-Agent", "NbaRosterMatchupAnalyzer/1.0")
                 .GET()
                 .build();
     }

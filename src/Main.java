@@ -2,7 +2,7 @@ import nba.network.NbaApiClient;
 import nba.ui.ConsoleMenu;
 
 /**
- * Main application entry point for the NBA OOP Analyzer & Match Predictor.
+ * Main application entry point for the NBA Roster & Matchup Analyzer.
  */
 public class Main {
 
