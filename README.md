@@ -13,7 +13,7 @@ Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JS
 - **Custom Iterator Pattern (`nba.iterator`):** `Team` implements `Iterable<Player>` backed by a custom `PlayerIterator` (`Iterator<Player>`), enabling idiomatic `for (Player player : team)` traversal without exposing internal list references.
 - **Strategy Pattern & Polymorphism (`nba.prediction`):** `Predictable` defines a common contract implemented by `RegularSeasonPredictor` and `PlayoffPredictor`, selected dynamically at runtime in `ConsoleMenu`.
 - **Modern Java Record & Timezone Conversion (`nba.model`, `nba.network`):** Immutable `ScheduledMatch` record represents daily games fetched from ESPN's live scoreboard, converting UTC tip-off times automatically to Berlin local time (CET/CEST) via `java.time`.
-- **Asynchronous Networking & Resilience (`nba.network`):** `NbaApiClient` dispatches non-blocking per-athlete HTTP requests concurrently via `CompletableFuture`, caches loaded `Team` instances in memory, and falls back gracefully to offline rosters if network connectivity is unavailable.
+- **Asynchronous Networking & Resilience (`nba.network`):** `NbaApiClient` dispatches non-blocking per-athlete HTTP requests concurrently via `CompletableFuture`, caches live `Team` instances in memory, and falls back to clearly labeled `[OFFLINE SAMPLE]` rosters and matchups if network connectivity is unavailable.
 - **Automated Unit Testing (`test/nba`):** JUnit 5 test suite covering the `nba.model` and `nba.iterator` packages (constructor validation, boundary values, defensive copying immutability, custom iterator traversal, and rotational impact rating math).
 
 ```mermaid
@@ -110,7 +110,7 @@ classDiagram
 
 ## Sample Console Output
 
-> Sample console runs captured from ESPN's live feeds. Team ratings, active rosters, and win probabilities are computed on-demand from live endpoints upon each menu request.
+> The transcripts below are static recorded snapshots from a previous session to illustrate the console layout. When running the application with an active internet connection, data is fetched on-demand from ESPN's public endpoints; if offline or unreachable, the application prints a `[WARNING]` notice and marks fallback teams and schedules with `[OFFLINE SAMPLE]`.
 
 ### 1. Single Match Prediction (Option `[4]`)
 
@@ -124,9 +124,9 @@ classDiagram
 [0] Exit
 Your choice: 4
 Enter home team code to predict (e.g. LAL, BOS, HOU): LAL
-Loading live 2026-27 roster for LAL...
+Fetching roster data for LAL...
 Enter away team code to predict (e.g. LAL, BOS, HOU): POR
-Loading live 2026-27 roster for POR...
+Fetching roster data for POR...
 Select Mode ([1] Regular Season, [2] Playoff): 1
 
 === REGULAR SEASON PREDICTOR ===
@@ -134,7 +134,7 @@ Predicted Winner : Los Angeles Lakers [LAL] (Win Probability: 62,5%)
 Power Breakdown  : LAL (Home, +2,2 Court Bonus): 42,25 rating vs POR (Away): 35,23 rating
 ```
 
-### 2. Live Daily Matchups & Batch Prediction in Berlin Time (Option `[5]`)
+### 2. Daily Matchups & Batch Prediction in Berlin Time (Option `[5]`)
 
 ```text
 === NBA ROSTER & MATCHUP ANALYZER ===

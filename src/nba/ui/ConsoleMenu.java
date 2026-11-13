@@ -76,7 +76,7 @@ public class ConsoleMenu {
             System.out.println("Unknown team code: "  + code);
             return null;
         } else {
-            System.out.println("Loading live 2026-27 roster for " + code + "...");
+            System.out.println("Fetching roster data for " + code + "...");
             return apiClient.fetchTeam(code);
         }
     }

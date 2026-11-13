@@ -132,10 +132,10 @@ public class NbaApiClient {
 
     /**
      * Fetches a fully populated {@link Team} with coach and active players for the specified code.
-     * Serves cached instances if already loaded; falls back to an offline default roster upon network failure.
+     * Serves cached instances if already loaded; falls back to a clearly labeled offline sample roster upon network failure.
      * @param teamCode three-letter team abbreviation
      * @return fully populated {@link Team}
-     * @throws IllegalArgumentException if the team code ist not recognized
+     * @throws IllegalArgumentException if the team code is not recognized
      */
     public Team fetchTeam(String teamCode) {
         teamCode = normalizeTeamCode(teamCode);
@@ -186,16 +186,15 @@ public class NbaApiClient {
             teamCache.put(code, team);
             return team;
         } catch (Exception e) {
-            System.out.println("[INFO] Live API unavailable(" + e.getMessage() + "). Loading offline fallback roster...");
-            Team fallback = createFallbackTeam(code, meta);
-            teamCache.put(code, fallback);
-            return fallback;
+            System.out.println("[WARNING] Live ESPN API unavailable (" + e.getMessage()
+                    + "). Using offline sample roster for " + code + " (not live data).");
+            return createFallbackTeam(code, meta);
         }
     }
 
     /**
      * Fetches today's live scheduled NBA matchups from ESPN's scoreboard endpoint.
-     * Falls back to sample marquee matchups if the endpoint is unreachable or offline.
+     * Falls back to clearly labeled sample matchups if the endpoint is unreachable or offline.
      * @return a list of {@link ScheduledMatch} instances scheduled for today
      */
     public List<ScheduledMatch> fetchTonightMatches() {
@@ -208,7 +207,7 @@ public class NbaApiClient {
             }
             throw new IllegalStateException("No scheduled games found");
         } catch (Exception e) {
-            System.out.println("[INFO] Live scoreboard unavailable. Loading sample matchups...");
+            System.out.println("[WARNING] Live ESPN scoreboard unavailable. Using offline sample matchups (not live schedule).");
             return createFallbackMatches();
         }
     }
@@ -231,35 +230,35 @@ public class NbaApiClient {
     }
 
     /**
-     * Builds an offline fallback team with realistic stats when the live API is inaccessible.
+     * Builds a clearly labeled offline sample team when the live API is inaccessible.
      * @param code team abbreviation
      * @param meta team metadata record
-     * @return fallback {@link Team}
+     * @return offline sample {@link Team}
      */
     private Team createFallbackTeam(String code, TeamMeta meta) {
-        Coach coach = new Coach("Head Coach (" + code + ")", 45, meta.coachStyle(), meta.coachBonus());
-        Team team = new Team(meta.fullName(), code, coach);
+        Coach coach = new Coach("Sample Coach (" + code + ")", 45, meta.coachStyle(), meta.coachBonus());
+        Team team = new Team(meta.fullName() + " [OFFLINE SAMPLE]", code, coach);
         if (code.equals("LAL")) {
-            team.addPlayer(new Player("Luka Doncic", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1, 49.7));
-            team.addPlayer(new Player("Austin Reaves", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4, 47.5));
-            team.addPlayer(new Player("Walker Kessler", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2, 65.0));
+            team.addPlayer(new Player("Luka Doncic (Sample)", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1, 49.7));
+            team.addPlayer(new Player("Austin Reaves (Sample)", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4, 47.5));
+            team.addPlayer(new Player("Walker Kessler (Sample)", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2, 65.0));
         } else if (code.equals("BOS")) {
-            team.addPlayer(new Player("Jayson Tatum", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7, 47.5));
-            team.addPlayer(new Player("Paul George", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3, 45.5));
-            team.addPlayer(new Player("Derrick White", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6, 46.5));
+            team.addPlayer(new Player("Jayson Tatum (Sample)", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7, 47.5));
+            team.addPlayer(new Player("Paul George (Sample)", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3, 45.5));
+            team.addPlayer(new Player("Derrick White (Sample)", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6, 46.5));
         } else {
-            team.addPlayer(new Player(code + " Star Guard", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8, 45.0));
-            team.addPlayer(new Player(code + " Starting Wing", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9, 46.5));
-            team.addPlayer(new Player(code + " Rim Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
+            team.addPlayer(new Player(code + " Sample Guard", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8, 45.0));
+            team.addPlayer(new Player(code + " Sample Wing", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9, 46.5));
+            team.addPlayer(new Player(code + " Sample Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
         }
         return team;
     }
 
     private List<ScheduledMatch> createFallbackMatches() {
         List<ScheduledMatch> fallback = new ArrayList<>();
-        fallback.add(new ScheduledMatch("LAL", "BOS", "01:30 CET"));
-        fallback.add(new ScheduledMatch("DEN", "GSW", "03:00 CET"));
-        fallback.add(new ScheduledMatch("NYK", "CLE", "01:00 CET"));
+        fallback.add(new ScheduledMatch("LAL", "BOS", "01:30 CET [OFFLINE SAMPLE]"));
+        fallback.add(new ScheduledMatch("DEN", "GSW", "03:00 CET [OFFLINE SAMPLE]"));
+        fallback.add(new ScheduledMatch("NYK", "CLE", "01:00 CET [OFFLINE SAMPLE]"));
         return fallback;
     }
 }
