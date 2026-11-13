@@ -4,7 +4,7 @@ import nba.model.Team;
 
 /**
  * Regular season prediction engine implementing {@link Predictable}.
- * Incorporates a standard home-court rating bonus and calculates win probability using a Pythagorean expectation exponent to produce realistic separation.
+ * Incorporates a standard home-court rating bonus and estimates win probability using a Pythagorean-style exponent based on team rating separation.
  */
 public class RegularSeasonPredictor implements Predictable{
 

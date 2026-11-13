@@ -38,8 +38,8 @@ public class PlayoffPredictor implements Predictable{
     }
 
     /**
-     * imulates a high-intensity playoff matchup applying elevated playoff home-court bonus
-     * and star-driven ratings via Pythagorean expectation.
+     * Simulates a high-intensity playoff matchup applying elevated playoff home-court bonus
+     * and star-driven ratings to estimate win probabilities via a Pythagorean-style exponent.
      * @param homeTeam the team hosting the game on its home court
      * @param awayTeam the visiting team
      * @return the playoff prediction outcome

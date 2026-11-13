@@ -236,20 +236,20 @@ public class NbaApiClient {
      * @return offline sample {@link Team}
      */
     private Team createFallbackTeam(String code, TeamMeta meta) {
-        Coach coach = new Coach("Sample Coach (" + code + ")", 45, meta.coachStyle(), meta.coachBonus());
+        Coach coach = new Coach("Sample Coach (" + code + ") [OFFLINE SAMPLE]", 45, meta.coachStyle(), meta.coachBonus());
         Team team = new Team(meta.fullName() + " [OFFLINE SAMPLE]", code, coach);
         if (code.equals("LAL")) {
-            team.addPlayer(new Player("Luka Doncic (Sample)", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1, 49.7));
-            team.addPlayer(new Player("Austin Reaves (Sample)", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4, 47.5));
-            team.addPlayer(new Player("Walker Kessler (Sample)", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2, 65.0));
+            team.addPlayer(new Player("Luka Doncic [OFFLINE SAMPLE]", 27, "G", 33.5, 8.4, 8.8, 1.6, 0.6, 4.1, 49.7));
+            team.addPlayer(new Player("Austin Reaves [OFFLINE SAMPLE]", 28, "G", 20.2, 4.5, 5.8, 1.1, 0.3, 2.4, 47.5));
+            team.addPlayer(new Player("Walker Kessler [OFFLINE SAMPLE]", 25, "C", 11.4, 10.8, 1.5, 0.6, 2.6, 1.2, 65.0));
         } else if (code.equals("BOS")) {
-            team.addPlayer(new Player("Jayson Tatum (Sample)", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7, 47.5));
-            team.addPlayer(new Player("Paul George (Sample)", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3, 45.5));
-            team.addPlayer(new Player("Derrick White (Sample)", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6, 46.5));
+            team.addPlayer(new Player("Jayson Tatum [OFFLINE SAMPLE]", 28, "F", 28.4, 8.5, 5.4, 1.2, 0.7, 2.7, 47.5));
+            team.addPlayer(new Player("Paul George [OFFLINE SAMPLE]", 36, "F", 21.0, 5.4, 4.2, 1.5, 0.5, 2.3, 45.5));
+            team.addPlayer(new Player("Derrick White [OFFLINE SAMPLE]", 32, "G", 16.5, 4.3, 5.1, 1.1, 1.1, 1.6, 46.5));
         } else {
-            team.addPlayer(new Player(code + " Sample Guard", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8, 45.0));
-            team.addPlayer(new Player(code + " Sample Wing", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9, 46.5));
-            team.addPlayer(new Player(code + " Sample Center", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
+            team.addPlayer(new Player(code + " Sample Guard [OFFLINE SAMPLE]", 26, "G", 25.0, 5.2, 6.8, 1.4, 0.4, 2.8, 45.0));
+            team.addPlayer(new Player(code + " Sample Wing [OFFLINE SAMPLE]", 25, "F", 18.5, 6.4, 3.2, 1.1, 0.6, 1.9, 46.5));
+            team.addPlayer(new Player(code + " Sample Center [OFFLINE SAMPLE]", 27, "C", 14.2, 10.5, 2.1, 0.7, 2.1, 1.7, 62.0));
         }
         return team;
     }
