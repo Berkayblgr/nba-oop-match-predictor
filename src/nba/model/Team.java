@@ -115,7 +115,7 @@ public class Team implements Iterable<Player> {
     }
 
     /**
-     * alculates the overall composite power rating of the team based on:
+     * Calculates the overall composite power rating of the team based on:
      * 1. Weighted Top-8 active rotation (starters 1.2x, primary bench 0.6x)
      * 2. Head coach tactical bonus
      * 3. Live season win percentage form bonus/penalty
@@ -144,7 +144,7 @@ public class Team implements Iterable<Player> {
         int totalGames = wins + losses;
         if (totalGames > 0) {
             double winPct = (double) wins / totalGames;
-            recordBonus = (winPct - 0.50) * 14.0; // Ör: 6-2 (%75) -> +3.5 bonus | 2-6 (%25) -> -3.5 ceza
+            recordBonus = (winPct - 0.50) * 14.0; // e.g., 6-2 (75%) -> +3.5 bonus | 2-6 (25%) -> -3.5 penalty
         }
         return (weightedImpact / totalWeight) + coach.getTacticalBonus() + recordBonus;
     }
@@ -157,23 +157,23 @@ public class Team implements Iterable<Player> {
 
     @Override
     public boolean equals(Object other) {
-        // Identitaet
+        // Identity check
         if (this == other)
             return true;
-        // null
+        // Null check
         if (other == null)
             return false;
-        // Typvergliech
+        // Type comparison
         if (getClass() != other.getClass())
             return false;
-        // Team-Cast
+        // Cast to Team
         Team otherTeam = (Team) other;
-        // Attribute vergleichen
+        // Compare attributes
         if (!name.equals(otherTeam.name))
             return false;
         if (!abbreviation.equals(otherTeam.abbreviation))
             return false;
-        // Objekte sind gleich
+        // Objects are equal
         return true;
     }
 

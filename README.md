@@ -1,8 +1,8 @@
 # NBA OOP Analyzer & Match Predictor
 
-A zero-dependency Java console application that fetches live NBA rosters, coaching staff, injury reports, and per-game player statistics from ESPN's public endpoints to analyze player impact and simulate matchup win probabilities.
+A zero-dependency Java console application that fetches live NBA rosters, head coach names, injury statuses, and per-game player statistics from ESPN's public endpoints to analyze player impact and simulate matchup win probabilities using a heuristic rating model.
 
-Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JSON parsing, and core Object-Oriented Programming patterns) without external libraries or build frameworks.
+Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JSON parsing, and core Object-Oriented Programming patterns) without external runtime libraries or build frameworks.
 
 ---
 
@@ -14,7 +14,7 @@ Built with pure Java (`java.net.http.HttpClient`, `CompletableFuture`, custom JS
 - **Strategy Pattern & Polymorphism (`nba.prediction`):** `Predictable` defines a common contract implemented by `RegularSeasonPredictor` and `PlayoffPredictor`, selected dynamically at runtime in `ConsoleMenu`.
 - **Modern Java Record & Timezone Conversion (`nba.model`, `nba.network`):** Immutable `ScheduledMatch` record represents daily games fetched from ESPN's live scoreboard, converting UTC tip-off times automatically to Berlin local time (CET/CEST) via `java.time`.
 - **Asynchronous Networking & Resilience (`nba.network`):** `NbaApiClient` dispatches non-blocking per-athlete HTTP requests concurrently via `CompletableFuture`, caches loaded `Team` instances in memory, and falls back gracefully to offline rosters if network connectivity is unavailable.
-- **Automated Unit Testing (`test/nba/model`):** Comprehensive JUnit 5 test suite verifying constructor bounds, boundary value analysis (`Grenzwertanalyse`), defensive copying immutability, and rotational impact rating algorithms across all model entities.
+- **Automated Unit Testing (`test/nba`):** JUnit 5 test suite covering the `nba.model` and `nba.iterator` packages (constructor validation, boundary values, defensive copying immutability, custom iterator traversal, and rotational impact rating math).
 
 ```mermaid
 classDiagram
@@ -100,17 +100,17 @@ classDiagram
    - `Multiplier = 1.0 + ((FG% - 46.0) / 200.0)`
    - `ImpactScore = BaseImpact * Multiplier`
 2. **Live Injury Filtering:** Players marked `"status":"Out"` in ESPN's live roster feed are excluded automatically before rating calculation.
-3. **Top-8 Rotation & Team Form:** Rather than diluting team strength with end-of-bench garbage-time minutes, `Team.calculateTeamPower()` evaluates the top 8 active rotation players (`1.2x` weight for starters 1–5, `0.6x` weight for bench rotation 6–8), adds the head coach's tactical bonus, and incorporates a live win-percentage form factor `(winPct - 0.50) * 14.0`.
-4. **Context-Specific Modes & Pythagorean Win Expectancy:**
+3. **Top-8 Rotation & Team Form:** Rather than diluting team strength with end-of-bench garbage-time minutes, `Team.calculateTeamPower()` evaluates the top 8 active rotation players (`1.2x` weight for starters 1–5, `0.6x` weight for bench rotation 6–8), adds the head coach's configured tactical bonus, and incorporates a live win-percentage form factor `(winPct - 0.50) * 14.0`.
+4. **Context-Specific Modes & Heuristic Win Expectancy:**
    - **Regular Season:** Applies a standard `+2.2` home-court rating bonus.
    - **Playoffs:** Amplifies the team's #1 star (`+0.35 * maxStarImpact`), coaching adjustments (`+0.50 * tacticalBonus`), and home-court intensity (`+3.2`).
-   - Win probability is derived via a Pythagorean exponent (`rating^2.8`) to produce realistic separation between contenders and rebuilding teams.
+   - Win probability is estimated via a Pythagorean-style exponent (`rating^2.8`) to model separation between contenders and rebuilding teams.
 
 ---
 
 ## Sample Console Output
 
-> Real console runs captured from live ESPN 2026-27 feeds. Ratings, injuries, and win probabilities update dynamically as real games conclude.
+> Sample console runs captured from ESPN's live feeds. Team ratings, active rosters, and win probabilities are computed on-demand from live endpoints upon each menu request.
 
 ### 1. Single Match Prediction (Option `[4]`)
 

@@ -29,7 +29,7 @@ class CoachTest {
 
 
     @Test
-    @DisplayName("Should throw IllegalArgumentException when tactical bonus is out of bounds (0.0 - 15.0")
+    @DisplayName("Should throw IllegalArgumentException when tactical bonus is out of bounds (0.0 - 15.0)")
     void shouldThrowIllegalArgumentExceptionWhenTacticalBonusIsOutOfBounds() {
         assertThrows(IllegalArgumentException.class, () -> new Coach("Steve Kerr",59,"Motion Offense", -1));
         assertThrows(IllegalArgumentException.class, () -> new Coach("Steve Kerr",59,"Motion Offense", 15.1));

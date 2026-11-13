@@ -49,15 +49,15 @@ class PlayerTest {
         // Arrange
         Player efficientPlayer = new Player("Tyrese Maxey", 25, "G", 20.0, 10.0, 10.0, 2.0, 1.0, 2.0, 56.0);
         Player averagePlayer = createDefaultPlayer();
-        Player inefficientPlayer = new Player("Dennis Schöder", 33, "G",  20.0, 10.0, 10.0, 2.0, 1.0, 2.0, 36.0);
+        Player inefficientPlayer = new Player("Dennis Schröder", 33, "G", 20.0, 10.0, 10.0, 2.0, 1.0, 2.0, 36.0);
 
         // Act
-        double efficentFgPct = efficientPlayer.calculateImpactScore();
+        double efficientFgPct = efficientPlayer.calculateImpactScore();
         double averageFgPct = averagePlayer.calculateImpactScore();
         double inefficientFgPct = inefficientPlayer.calculateImpactScore();
 
         // Assert
-        assertTrue(efficentFgPct > averageFgPct);
+        assertTrue(efficientFgPct > averageFgPct);
         assertTrue(averageFgPct > inefficientFgPct);
     }
 

@@ -1,7 +1,7 @@
 package nba.model;
 
 /**
- * Abstract base class representing an individual person in the NBA ecosystem (e.g., PLayer or Coach).
+ * Abstract base class representing an individual person in the NBA ecosystem (e.g., Player or Coach).
  * Encapsulates shared attributes such as name and age with validation logic.
  */
 public abstract class Person {
@@ -53,23 +53,23 @@ public abstract class Person {
 
     @Override
     public boolean equals(Object other) {
-        // Identitaet
+        // Identity check
         if (this == other)
             return true;
-        // null
+        // Null check
         if (other == null)
             return false;
-        // Typvergliech
+        // Type comparison
         if (getClass() != other.getClass())
             return false;
-        // Person-Cast
+        // Cast to Person
         Person otherPerson = (Person) other;
-        // Attribute vergleichen
+        // Compare attributes
         if (!name.equals(otherPerson.getName()))
             return false;
         if (age != otherPerson.getAge())
             return false;
-        // Objekte sind gleich
+        // Objects are equal
         return true;
     }
 

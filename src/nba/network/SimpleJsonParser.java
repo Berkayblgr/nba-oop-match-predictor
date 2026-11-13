@@ -121,13 +121,12 @@ public class SimpleJsonParser {
     }
 
     /**
-     * Parses all athlete entries from a roster JSON, automatically filtering out
-     * any player officially designated as "Out" in live injury reports.
+     * Parses the team's win-loss record summary from the ESPN roster JSON payload.
      * @param rosterJson the raw roster JSON payload
-     * @return list of string arrays each containing [athleteId, fullName, age, position]
+     * @return a two-element int array {@code [wins, losses]}, or {@code [0, 0]} if unavailable
      */
     public static int[] parseTeamRecord(String rosterJson) {
-        String record = extractValue(rosterJson, "recordSummary"); // örn: "6-2"
+        String record = extractValue(rosterJson, "recordSummary"); // e.g., "6-2"
         String[] parts = record.split("-");
         if (parts.length >= 2) {
             int wins = (int) parseSafeDouble(parts[0]);
@@ -137,6 +136,12 @@ public class SimpleJsonParser {
         return new int[]{0, 0};
     }
 
+    /**
+     * Parses all athlete entries from a roster JSON, automatically filtering out
+     * any player officially designated as "Out" in live injury reports.
+     * @param rosterJson the raw roster JSON payload
+     * @return list of string arrays each containing [athleteId, fullName, age, position]
+     */
     public static List<String[]> parseRosterEntries(String rosterJson) {
         List<String[]> entries = new ArrayList<>();
         String uidMarker = "\"uid\":\"s:40~l:46~a:";
@@ -144,7 +149,7 @@ public class SimpleJsonParser {
         while (true) {
             int markerPos = rosterJson.indexOf(uidMarker, searchFrom);
             if (markerPos == -1) {
-                break; // Başka oyuncu kalmadıysa döngüden çık
+                break; // Break if no more athlete entries remain
             }
             int idStart = markerPos + uidMarker.length();
             int idEnd = rosterJson.indexOf('"', idStart);
@@ -160,7 +165,7 @@ public class SimpleJsonParser {
 
             if (athleteSlice.contains("\"status\":\"Out\"")) {
                 searchFrom = idEnd + 1;
-                continue; // Sakat ("Out") oyuncuyu atla, sıradakine geç
+                continue; // Skip injured ("Out") player
             }
 
             String fullName = extractValue(athleteSlice, "fullName");
@@ -195,7 +200,7 @@ public class SimpleJsonParser {
         double fgPct = 46.0;
         int regIndex = overviewJson.indexOf("\"Regular Season\"");
         if (regIndex == -1) {
-            return null; // Bu sezon henüz maça çıkmamış (sakat/çaylak) oyuncuyu atla
+            return null; // Skip player with no regular season games played
         }
         String[] labels = extractArray(overviewJson, "labels");
         String[] stats = extractArray(overviewJson.substring(regIndex), "stats");
@@ -266,7 +271,7 @@ public class SimpleJsonParser {
                 int dateMarker = scoreboardJson.lastIndexOf("\"date\":\"", markerPos);
                 String matchTime = "Scheduled (CET)";
                 if (dateMarker != -1) {
-                    int dStart = dateMarker + 8; // "\"date\":\"" uzunluğu
+                    int dStart = dateMarker + 8; // Length of "\"date\":\""
                     int dEnd = scoreboardJson.indexOf('"', dStart);
                     if (dEnd != -1) {
                         matchTime = convertUtcToBerlinTime(scoreboardJson.substring(dStart, dEnd));
@@ -287,7 +292,7 @@ public class SimpleJsonParser {
     public static String convertUtcToBerlinTime(String utcDateStr) {
         try {
             String normalized = utcDateStr.trim();
-            // ESPN tarihi saniyesiz gönderirse (örn: "2026-11-07T00:00Z"), araya ":00" ekle
+            // Normalize 17-char timestamps without seconds (e.g., "2026-11-07T00:00Z") by inserting ":00"
             if (normalized.endsWith("Z") && normalized.length() == 17) {
                 normalized = normalized.substring(0, 16) + ":00Z";
             }
