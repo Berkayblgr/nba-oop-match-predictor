@@ -186,7 +186,7 @@ Power Breakdown  : GSW (Home, +2,2 Court Bonus): 39,31 rating vs NOP (Away): 30,
 ## Project Structure
 
 ```text
-nba-oop-match-predictor/
+nba-roster-matchup-analyzer/
 ├── .gitignore
 ├── README.md
 ├── src/
